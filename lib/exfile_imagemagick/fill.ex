@@ -24,7 +24,7 @@ defmodule ExfileImagemagick.Fill do
   def call(file, [width, height], opts) do
     file = coerce_to_file(file)
 
-    new_path = Exfile.Tempfile.random_file!("imagemagick")
+    new_path = Exfile.Tempfile.random_file!("imagemagick", monitor_pid(opts))
     destination = destination_with_format(new_path, opts)
 
     dest_dimensions = to_string(width) <> "x" <> to_string(height)

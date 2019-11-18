@@ -14,4 +14,8 @@ defmodule ExfileImagemagick.Utilities do
       :error -> path
     end
   end
+
+  def monitor_pid(opts) do
+    Keyword.get(opts, :monitor_pid, self())
+  end
 end

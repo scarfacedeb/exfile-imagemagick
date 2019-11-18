@@ -20,14 +20,14 @@ defmodule ExfileImagemagick.Convert do
     "jpg" => "jpeg"
   }
 
-  def call(file, [dest_format], _opts) do
+  def call(file, [dest_format], opts) do
     file = coerce_to_file(file)
 
     dest_format = String.downcase(dest_format)
     dest_format = Map.get(@format_synonyms, dest_format, dest_format)
 
     if should_format?(file, dest_format) do
-      perform_format(file, dest_format)
+      perform_format(file, dest_format, opts)
     else
       {:ok, file}
     end
@@ -43,8 +43,8 @@ defmodule ExfileImagemagick.Convert do
     end
   end
 
-  defp perform_format(%LocalFile{path: path, meta: meta}, dest_format) do
-    new_path = Exfile.Tempfile.random_file!("imagemagick")
+  defp perform_format(%LocalFile{path: path, meta: meta}, dest_format, opts) do
+    new_path = Exfile.Tempfile.random_file!("imagemagick", monitor_pid(opts))
     convert_args = [
       path,
       "-auto-orient",
